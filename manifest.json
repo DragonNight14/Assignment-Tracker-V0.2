@@ -2,12 +2,17 @@
   "name": "Assignment Manager",
   "short_name": "AssignmentMgr",
   "description": "A modern assignment manager with smart priority categorization and glassmorphism design",
-  "start_url": "/",
+  "start_url": "/https://dragonnight14.github.io/Assignment-Tracker-V0.2/",
+  "scope": "/https://dragonnight14.github.io/Assignment-Tracker-V0.2/",
+
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#6366F1",
   "orientation": "portrait-primary",
-  "display_override": ["window-controls-overlay", "standalone"],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "edge_side_panel": {
     "preferred_width": 400
   },
@@ -73,10 +78,14 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["education", "productivity", "utilities"],
+  "categories": [
+    "education",
+    "productivity",
+    "utilities"
+  ],
   "lang": "en-US",
   "dir": "ltr",
-  "scope": "/",
+  "scope": "/https://dragonnight14.github.io/Assignment-Tracker-V0.2/",
   "prefer_related_applications": false,
   "screenshots": [
     {
@@ -118,7 +127,6 @@
       ]
     }
   ],
-  "related_applications": [],
   "protocol_handlers": [
     {
       "protocol": "web+assignment",
