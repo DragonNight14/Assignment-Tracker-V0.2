@@ -1,0 +1,66 @@
+{
+  "name": "mobile-assignment-manager",
+  "version": "1.1.0",
+  "description": "A modern Progressive Web App for managing academic assignments with smart priority categorization and beautiful glassmorphism design",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -p 8000",
+    "dev": "npx live-server --port=8000 --open=/",
+    "build": "echo 'No build step required for static PWA'",
+    "test": "echo 'No tests specified'",
+    "lint": "echo 'No linting configured'",
+    "deploy": "gh-pages -d .",
+    "generate-icons": "node create-icons.js"
+  },
+  "keywords": [
+    "pwa",
+    "progressive-web-app",
+    "assignment-manager",
+    "education",
+    "productivity",
+    "canvas-lms",
+    "google-classroom",
+    "mobile-first",
+    "glassmorphism",
+    "offline-first"
+  ],
+  "author": {
+    "name": "Your Name",
+    "email": "your-email@example.com",
+    "url": "https://github.com/yourusername"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mobile_assignment_manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/mobile_assignment_manager/issues"
+  },
+  "homepage": "https://yourusername.github.io/mobile_assignment_manager",
+  "devDependencies": {
+    "gh-pages": "^6.0.0",
+    "live-server": "^1.2.2",
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "pwa": {
+    "name": "Assignment Manager",
+    "short_name": "AssignmentMgr",
+    "description": "A modern assignment manager with smart priority categorization",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#667eea",
+    "theme_color": "#6366F1",
+    "orientation": "portrait-primary"
+  }
+}

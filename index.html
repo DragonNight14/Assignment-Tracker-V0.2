@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A modern assignment manager with smart priority categorization and glassmorphism design">
+    <meta name="theme-color" content="#6366F1">
+    <title>Assignment Manager</title>
+  
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+  
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+  
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+    <!-- Configuration -->
+    <script src="config.example.js"></script>
+    
+    <!-- API Services -->
+    <script src="services/canvas-api.js"></script>
+    <script src="services/google-classroom-api.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-tasks"></i>
+                    Assignment Manager
+                </h1>
+                <div class="header-actions">
+                    <button id="theme-toggle" class="btn-icon" title="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="add-assignment" class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Add Assignment
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </button>
+            <button class="nav-tab" data-tab="assignments">
+                <i class="fas fa-list"></i>
+                All Assignments
+            </button>
+            <button class="nav-tab" data-tab="calendar">
+                <i class="fas fa-calendar"></i>
+                Calendar
+            </button>
+            <button class="nav-tab" data-tab="settings">
+                <i class="fas fa-cog"></i>
+                Settings
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active">
+                <div id="dashboard-content">
+                    <!-- Dashboard content will be rendered here -->
+                </div>
+                <button id="add-assignment-dashboard" class="btn-primary floating-add-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- All Assignments Tab -->
+            <div id="assignments-tab" class="tab-content">
+                <div id="assignments-content">
+                    <!-- Assignments content will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Calendar Tab -->
+            <div id="calendar-tab" class="tab-content">
+                <div id="calendar-content">
+                    <!-- Calendar content will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content">
+                <div class="settings-container">
+                    <div class="settings-section">
+                        <h3>Theme</h3>
+                        <div class="theme-section">
+                            <h4>Preset Themes</h4>
+                            <div class="color-palette">
+                                <div class="color-option" data-theme="purple" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></div>
+                                <div class="color-option" data-theme="pink" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"></div>
+                                <div class="color-option" data-theme="blue" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"></div>
+                                <div class="color-option" data-theme="green" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"></div>
+                                <div class="color-option" data-theme="orange" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%)"></div>
+                                <div class="color-option" data-theme="teal" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"></div>
+                                <div class="color-option" data-theme="dark" style="background: linear-gradient(135deg, #2D1B69 0%, #11998e 100%)"></div>
+                                <div class="color-option" data-theme="sunset" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"></div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Gradient -->
+                        <div class="theme-section">
+                            <h4>Custom Gradient</h4>
+                            <div class="custom-gradient-controls">
+                                <div class="gradient-inputs">
+                                    <div class="form-group">
+                                        <label for="gradient-color1">Start Color</label>
+                                        <input type="color" id="gradient-color1" value="#667eea">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="gradient-color2">End Color</label>
+                                        <input type="color" id="gradient-color2" value="#764ba2">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="gradient-angle">Angle</label>
+                                        <input type="range" id="gradient-angle" min="0" max="360" value="135">
+                                        <span id="gradient-angle-value">135°</span>
+                                    </div>
+                                </div>
+                                <div class="gradient-preview" id="gradient-preview"></div>
+                                <button type="button" class="btn-secondary" id="apply-custom-gradient">Apply Custom Gradient</button>
+                            </div>
+                        </div>
+
+                        <!-- Solid Color -->
+                        <div class="theme-section">
+                            <h4>Solid Color</h4>
+                            <div class="solid-color-controls">
+                                <div class="form-group">
+                                    <label for="solid-color">Background Color</label>
+                                    <input type="color" id="solid-color" value="#667eea">
+                                </div>
+                                <div class="solid-preview" id="solid-preview"></div>
+                                <button type="button" class="btn-secondary" id="apply-solid-color">Apply Solid Color</button>
+                            </div>
+                        </div>
+
+                        <!-- Custom Image -->
+                        <div class="theme-section">
+                            <h4>Custom Background Image</h4>
+                            <div class="image-controls">
+                                <div class="form-group">
+                                    <label for="background-image">Upload Image</label>
+                                    <input type="file" id="background-image" accept="image/*">
+                                </div>
+                                <div class="form-group">
+                                    <label for="image-opacity">Overlay Opacity</label>
+                                    <input type="range" id="image-opacity" min="0" max="100" value="20">
+                                    <span id="image-opacity-value">20%</span>
+                                </div>
+                                <div class="image-preview" id="image-preview"></div>
+                                <button type="button" class="btn-secondary" id="remove-background-image">Remove Image</button>
+                            </div>
+                        </div>
+
+                        <div class="theme-options">
+                            <label>
+                                <input type="checkbox" id="dark-mode-toggle"> Dark Mode
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>API Connections</h3>
+                        <div class="api-connections">
+                            <div class="api-connection">
+                                <div class="connection-info">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <div>
+                                        <h4>Canvas LMS</h4>
+                                        <p id="canvas-status" class="connection-status">Not connected</p>
+                                    </div>
+                                </div>
+                                <div class="connection-actions">
+                                    <button id="connect-canvas" class="btn-primary">Connect</button>
+                                    <button id="disconnect-canvas" class="btn-secondary" style="display: none;">Disconnect</button>
+                                    <button id="sync-canvas" class="btn-secondary" style="display: none;">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="api-connection">
+                                <div class="connection-info">
+                                    <i class="fab fa-google"></i>
+                                    <div>
+                                        <h4>Google Classroom</h4>
+                                        <p id="google-status" class="connection-status">Not connected</p>
+                                    </div>
+                                </div>
+                                <div class="connection-actions">
+                                    <button id="connect-google" class="btn-primary">Connect</button>
+                                    <button id="disconnect-google" class="btn-secondary" style="display: none;">Disconnect</button>
+                                    <button id="sync-google" class="btn-secondary" style="display: none;">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Data Management</h3>
+                        <div class="settings-actions">
+                            <button id="export-data" class="btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Export Data
+                            </button>
+                            <button id="import-data" class="btn-secondary">
+                                <i class="fas fa-upload"></i>
+                                Import Data
+                            </button>
+                            <button id="clear-data" class="btn-danger">
+                                <i class="fas fa-trash"></i>
+                                Clear All Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Assignment Modal -->
+    <div id="assignment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add Assignment</h2>
+                <button id="close-modal" class="btn-icon">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="assignment-form">
+                <div class="form-group">
+                    <label for="assignment-title">Title *</label>
+                    <input type="text" id="assignment-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="assignment-course">Course *</label>
+                    <input type="text" id="assignment-course" required>
+                </div>
+                <div class="form-group">
+                    <label for="assignment-description">Description</label>
+                    <textarea id="assignment-description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="assignment-date">Due Date *</label>
+                        <input type="date" id="assignment-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignment-time">Due Time *</label>
+                        <input type="time" id="assignment-time" required>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-assignment" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Assignment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- File input for import -->
+    <input type="file" id="file-input" accept=".json" style="display: none;">
+
+    <!-- Swipe indicator -->
+    <div id="swipe-indicator" class="swipe-indicator">
+        Swipe left/right to navigate tabs
+    </div>
+
+    <script src="app-simple.js"></script>
+    <script>
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make app globally accessible for onclick handlers
+            window.app = app;
+            
+            // Register service worker for PWA functionality
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New content is available, prompt user to refresh
+                                    if (confirm('New version available! Refresh to update?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            }
+            
+            // Handle PWA install prompt
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show install button or banner
+                const installBanner = document.createElement('div');
+                installBanner.className = 'install-banner';
+                installBanner.innerHTML = `
+                    <div class="install-content">
+                        <span>Install Assignment Manager for quick access!</span>
+                        <button id="install-btn" class="btn-primary">Install</button>
+                        <button id="dismiss-install" class="btn-icon">&times;</button>
+                    </div>
+                `;
+                document.body.appendChild(installBanner);
+                
+                document.getElementById('install-btn').addEventListener('click', () => {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the install prompt');
+                        }
+                        deferredPrompt = null;
+                        installBanner.remove();
+                    });
+                });
+                
+                document.getElementById('dismiss-install').addEventListener('click', () => {
+                    installBanner.remove();
+                });
+            });
+            
+            // Handle app installed
+            window.addEventListener('appinstalled', (evt) => {
+                console.log('PWA was installed');
+            });
+        });
+    </script>
+</body>
+</html>
