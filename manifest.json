@@ -4,7 +4,6 @@
   "description": "A modern assignment manager with smart priority categorization and glassmorphism design",
   "start_url": "/https://dragonnight14.github.io/Assignment-Tracker-V0.2/",
   "scope": "/https://dragonnight14.github.io/Assignment-Tracker-V0.2/",
-
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#6366F1",
@@ -85,7 +84,6 @@
   ],
   "lang": "en-US",
   "dir": "ltr",
-  "scope": "/https://dragonnight14.github.io/Assignment-Tracker-V0.2/",
   "prefer_related_applications": false,
   "screenshots": [
     {
